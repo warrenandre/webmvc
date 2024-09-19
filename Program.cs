@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,14 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
+   .AddNegotiate(options =>
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                options.EnableLdap(settings =>
+                {
+                    settings.Domain = "REDHATPOC.COM";
+                    settings.MachineAccountName = "maccount";
+                    settings.MachineAccountPassword = "Safety1#";
+                });
+            }
+        });
 
 builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to the default policy.
     options.FallbackPolicy = options.DefaultPolicy;
 });
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
