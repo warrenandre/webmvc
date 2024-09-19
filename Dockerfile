@@ -1,11 +1,10 @@
-# Use the official Red Hat Universal Base Image (UBI) for .NET 6
-FROM registry.access.redhat.com/ubi8/dotnet-60-runtime
-
-# Set the working directory
+# Use the official .NET runtime image as a base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
+
 # Copy the published application files
 COPY ./out .
 
-# Set the entry point for the container
+# Set the entry point for the application
 ENTRYPOINT ["dotnet", "webmvc.dll"]
