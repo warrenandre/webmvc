@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,18 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate(options =>
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                options.EnableLdap(settings =>
-                {
-                    settings.Domain = "REDHATPOC.COM";
-                    settings.MachineAccountName = "maccount";
-                    settings.MachineAccountPassword = "Safety1#";
-                });
-            }
-        });
+   .AddNegotiate();
 
 builder.Services.AddAuthorization(options =>
 {
